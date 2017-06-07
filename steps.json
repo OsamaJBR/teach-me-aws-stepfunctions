@@ -1,0 +1,51 @@
+{
+  "Comment": "Example of ChoiceState using AWS StepFunctions",
+  "StartAt": "SubNumbers",
+  "States": {
+    "SubNumbers": {
+      "Type": "Task",
+      "Resource": "ARN:OF:sub-numbers",
+      "Next": "ChoiceState"
+    },
+    "ChoiceState": {
+      "Type" : "Choice",
+      "Choices": [
+        {
+          "Variable": "$.number",
+          "NumericGreaterThan": 100,
+          "Next": "GreateThan"
+        },
+        {
+          "Variable": "$.number",
+          "NumericEquals": 100,
+          "Next": "LessThan"
+        }
+      ],
+      "Default": "EqualTo"
+    },
+
+    "GreateThan": {
+      "Type" : "Task",
+      "Resource": "ARN:OF:greater-than-lambda",
+      "Next": "FinalState"
+    },
+
+    "LessThan": {
+      "Type" : "Task",
+      "Resource": "ARN:OF:less-than-lambda",
+      "Next": "FinalState"
+    },
+
+    "EqualTo": {
+      "Type": "Fail",
+      "Cause": "No Matches!",
+      "End": true
+    },
+
+    "FinalState": {
+      "Type": "Task",
+      "Resource": "ARN:OF:final-state-lambda",
+      "End": true
+    }
+  }
+}

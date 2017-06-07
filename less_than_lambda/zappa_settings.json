@@ -1,0 +1,8 @@
+{
+    "develop": {
+        "keep_warm": false, 
+        "apigateway_enabled" : false,
+        "memory_size" : 128,
+        "debug": false
+    }
+}
