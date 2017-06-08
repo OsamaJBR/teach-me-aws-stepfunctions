@@ -69,5 +69,5 @@ $ zappa deploy develop
 </p>
 3- The final state suppose to send an SMS to the phone number subscribed in the SNS Topic.
 <p align="center">
- <img src="images/sms.png"/>
+ <img src="images/sms-rec.png"/>
 </p>
