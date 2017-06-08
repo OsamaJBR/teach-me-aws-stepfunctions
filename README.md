@@ -4,11 +4,20 @@
 I've learned Step Functions by the following example and I hope it can clear things for you.
  
 # Algorithm (Example)
+In this example, the algorithm takes two input numbers and substract them,then : 
+- If the result is larger than 100 the user should recieve a SMS with a random number between 100-1000. 
+- If it's less, then the random number in ths SMS should be from 0-100.
+- Else it's failed scenario, with a dead end.
+
 <p align="center">
  <img src="images/algorithm.png"/>
 </p>
  
-In step functions, you can consider that each process block is an AWS Lambda Function, that takes the output of previous as it's input.
+In step functions, you can consider that each process block is an AWS Lambda Function, that takes the output of previous state as input for the current state. Therefor we have 4 Lambda functions in this example: 
+- sub_numbers_lambda | takes { key1 : X, key2 : Y} and returns { number : Z }
+- greater_than_lambda | returns { final_number : rand(100,100) }
+- less_than_lambda | returns { final_number : rand(0,100) }
+- final_state_lambda | takes { final_number : C } 
  
 # Apply it
 1- Clone this repo
