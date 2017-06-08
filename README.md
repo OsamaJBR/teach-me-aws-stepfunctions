@@ -1,23 +1,82 @@
 # AWS Step Functions
 "AWS Step Functions is a web service that enables you to coordinate the components of distributed applications and microservices using visual workflows. You build applications from individual components that each perform a discrete function, or task, allowing you to scale and change applications quickly."
  
-I've learned Step Functions by the following example and I hope it can clear things for you.
+I've learned Step Functions by applying the following example and I hope it can help you in 
  
 # Algorithm (Example)
-In this example, the algorithm takes two input numbers and substract them,then : 
-- If the result is larger than 100 the user should recieve a SMS with a random number between 100-1000. 
-- If it's less, then the random number in ths SMS should be from 0-100.
+In this example, the algorithm takes two input numbers and subtract them,then : 
+- If the result is larger than 100 the user should receive a SMS with a random number between 100-1000. 
+- If it's less, then the random number in the SMS should be from 0-100.
 - Else it's failed scenario, with a dead end.
-
+ 
 <p align="center">
  <img src="images/algorithm.png"/>
 </p>
  
-In step functions, you can consider that each process block is an AWS Lambda Function, that takes the output of previous state as input for the current state. Therefor we have 4 Lambda functions in this example: 
+In step functions, you can consider that each process block is an AWS Lambda Function, that takes the output of previous state as input for the current state. Therefore we have 4 Lambda functions in this example: 
 - sub_numbers_lambda | takes { key1 : X, key2 : Y} and returns { number : Z }
 - greater_than_lambda | returns { final_number : rand(100,100) }
 - less_than_lambda | returns { final_number : rand(0,100) }
 - final_state_lambda | takes { final_number : C } 
+ 
+Step functions are described with json format, where you should define :
+- start_state (StartAt)
+- final_state (End)
+- next_state (Next)
+- choise_state ( Type : Choice), which supports many comparison operators. 
+ 
+# Step Functions Description Example
+```
+"StartAt": "SubNumbers",
+  "States": {
+    "SubNumbers": {
+      "Type": "Task",
+      "Resource": "ARN:OF:sub-numbers",
+      "Next": "ChoiceState"
+    },
+    "ChoiceState": {
+      "Type" : "Choice",
+      "Choices": [
+        {
+          "Variable": "$.number",
+          "NumericGreaterThan": 100,
+          "Next": "GreateThan"
+        },
+        {
+          "Variable": "$.number",
+          "NumericEquals": 100,
+          "Next": "LessThan"
+        }
+      ],
+      "Default": "EqualTo"
+    },
+ 
+    "GreateThan": {
+      "Type" : "Task",
+      "Resource": "ARN:OF:greater-than-lambda",
+      "Next": "FinalState"
+    },
+ 
+    "LessThan": {
+      "Type" : "Task",
+      "Resource": "ARN:OF:less-than-lambda",
+      "Next": "FinalState"
+    },
+ 
+    "EqualTo": {
+      "Type": "Fail",
+      "Cause": "No Matches!",
+      "End": true
+    },
+ 
+    "FinalState": {
+      "Type": "Task",
+      "Resource": "ARN:OF:final-state-lambda",
+      "End": true
+    }
+  }
+}
+```
  
 # Apply it
 1- Clone this repo
@@ -80,3 +139,6 @@ $ zappa deploy develop
 <p align="center">
  <img src="images/sms-rec.png"/>
 </p>
+ 
+ 
+ 
