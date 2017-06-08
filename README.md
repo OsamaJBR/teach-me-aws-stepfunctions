@@ -3,7 +3,7 @@
  
 I've learned Step Functions by the following example and I hope it can clear things for you.
  
-# Algorithm
+# Algorithm (Example)
 <p align="center">
  <img src="images/algorithm.png"/>
 </p>
@@ -66,4 +66,8 @@ $ zappa deploy develop
 ```
 <p align="center">
  <img src="images/example.png"/>
+</p>
+3- The final state suppose to send an SMS to the phone number subscribed in the SNS Topic.
+<p align="center">
+ <img src="images/sms.png"/>
 </p>
