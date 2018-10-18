@@ -17,7 +17,7 @@
         },
         {
           "Variable": "$.number",
-          "NumericEquals": 100,
+          "NumericLessThan": 100,
           "Next": "LessThan"
         }
       ],
@@ -38,8 +38,7 @@
 
     "EqualTo": {
       "Type": "Fail",
-      "Cause": "No Matches!",
-      "End": true
+      "Cause": "No Matches!"
     },
 
     "FinalState": {
@@ -49,3 +48,4 @@
     }
   }
 }
+
